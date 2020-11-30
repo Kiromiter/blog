@@ -103,3 +103,5 @@ _navbar.md 加载逻辑和 sidebar 文件一致，从每层目录下获取。
 * [:us:, :uk:](/)
 * [:cn:](/zh-cn/)
 ```
+
+参考链接：[导航栏](https://docsify.js.org/#/zh-cn/custom-navbar)
