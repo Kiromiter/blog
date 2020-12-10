@@ -1,7 +1,7 @@
 const gitalkConfig = {
   clientID: '421bcf76f3ff3f068d3b',
   clientSecret: '5902e7916955586aa0720469dd0a90abd540b730',
-  repo: 'Blog',
+  repo: 'blog',
   owner: 'Kiromiter',
   admin: ['Kiromiter'],
   // facebook-like distraction free mode
@@ -33,7 +33,7 @@ window.$docsify = {
   // 小屏设备下合并导航栏到侧边栏
   mergeNavbar: true,
   // 显示文档更新日期
-  formatUpdated: '{MM}/{DD} {HH}:{mm}',
+  formatUpdated: '{YYYY}-{MM}-{DD} {HH}:{mm}:{ss}',
   // 外部链接的打开方式
   // externalLinkTarget: '_blank',
   // 右上角链接的打开方式
@@ -99,20 +99,39 @@ window.$docsify = {
   },
   plugins: [
     function (hook, vm) {
+      var version = window.Docsify.version
+      var footer = [
+        '<hr/>',
+        '<footer>',
+        '<span><a href="https://github.com/Kiromiter/blog">源码地址</a> &copy;2020</span>',
+        '<span style="padding:0 10px">作者: <a href="https://github.com/Kiromiter" target="_blank">Kiromiter</a>.</span>',
+        '<span>docsify 版本: ' + version + '</span>',
+        '</footer>'
+      ].join('');
       hook.beforeEach(function (html) {
-        //console.log('beforeEach');
-      });
+        var url =
+          'https://github.com/Kiromiter/blog/tree/main/' +
+          vm.route.file;
+        var editHtml = '[📝 编辑文档](' + url + ')\n';
 
+        return (
+          '最新修改时间： {docsify-updated} ' + editHtml +
+          html
+        );
+      });
+      hook.afterEach(function (html) {
+        return html + footer;
+      });
       hook.doneEach(function () {
         var label, domObj, main, divEle, gitalk;
         label = vm.route.path.split("/").pop();
         domObj = Docsify.dom;
         main = domObj.getNode("#main");
-
         Array.apply(
           null,
           document.querySelectorAll("div.gitalk-container")
         ).forEach(function (ele) {
+
           ele.remove();
         });
 
@@ -120,17 +139,18 @@ window.$docsify = {
         divEle.id = "gitalk-container-" + label;
         divEle.className = "gitalk-container";
         divEle.style = "width: " + main.clientWidth + "px; margin: 0 auto 20px;";
-        domObj.appendTo(domObj.find(".content"), divEle);
+        main.insertBefore(divEle, domObj.find("footer").previousElementSibling);
         console.log('gitalk', gitalk);
         gitalk = new Gitalk(
           Object.assign(gitalkConfig, {
-            id: !label ? "home" : 'read'
+            id: !label ? "home" : label
           })
         );
         console.log('gitalk', gitalk);
         gitalk.render("gitalk-container-" + label);
       });
     }
+
   ]
 }
 // const gitalk = new Gitalk({

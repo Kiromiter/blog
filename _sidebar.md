@@ -5,11 +5,13 @@
 - [导航栏](./home/navbar.md)
 - [封面](./home/cover.md)
 
-### 测试
+<!-- ### 测试
 
 - [测试1](./test/ceshi1.md)
-- [测试2](./test/ceshi2.md)
+- [测试2](./test/ceshi2.md) -->
 
 ### 定制化
 
 - [配置项](./customize/config.md)
+- [插件列表](./customize/plugins.md)
+- [开发插件](./customize/write_plugin.md)
