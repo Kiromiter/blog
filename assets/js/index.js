@@ -80,15 +80,9 @@ window.$docsify = {
     // 匹配到的字符串将被用来识别索引
     // pathNamespaces: /^(\/(zh-cn|ru-ru))?(\/(v1|v2))?/
     copyCode: {
-      buttonText: {
-        '/': '点击复制'
-      },
-      errorText: {
-        '/': '错误'
-      },
-      successText: {
-        '/': '已复制'
-      }
+      buttonText: '点击复制',
+      errorText: '错误',
+      successText: '已复制'
     },
     count: {
       countable: true,
@@ -112,7 +106,7 @@ window.$docsify = {
         var url =
           'https://github.com/Kiromiter/blog/tree/main/' +
           vm.route.file;
-        var editHtml = '[📝 编辑文档](' + url + ')\n';
+        var editHtml = '[📝 编辑文档](' + url + ')\n\n';
 
         return (
           '最新修改时间： {docsify-updated} ' + editHtml +

@@ -15,7 +15,7 @@ body {
   margin-right: 70px;
   max-width: 1430px;
   padding: 30px 15px 40px;
-  position: relative;
+  /* position: relative; */
 }
 
 .vuep {
@@ -43,7 +43,7 @@ body {
 }
 
 .sidebar {
-  width: 360px;
+  width: 300px;
   padding: 5px;
 }
 
@@ -100,7 +100,7 @@ h2 a:hover {
 
 .markdown-section pre>code {
   font-size: 12px;
-  line-height: 1.4;
+  line-height: 2.5;
 }
 
 .token.selector {
