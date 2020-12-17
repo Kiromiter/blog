@@ -1,58 +1,73 @@
-最常见的圣杯布局实现方法。
-
-#### 需求
-
-圣杯布局左中右三列布局，渲染顺序中间列书写在前保证提前渲染，左右两列定宽，中间列自适应剩余宽度。
+CSS 实现线性渐变模拟长阴影。
 
 #### 关键点
 
-- 设置 `order` 定义项目的排列顺序。数值越小，排列越靠前，默认为0。
+- 借用了元素的两个伪元素
 
-- `flex-basis` 设置项目的宽度
+- 通过渐变色填充两个伪元素，再通过位移、变换放置在合适的位置
 
-- `flex-grow` 设置或检索弹性盒子的扩展比率，填充空白
+    - skew() 定义2D倾斜变换，所以是在平面上进行的扭曲变换
 
+    - scale() 将元素根据中心原点进行缩放
 
-```pug
-div.g-container
-  div.g-middle middle
-  div.g-left left
-  div.g-right right
+```html
+<div class="g-container">
+  <div></div>
+</div>
 ```
 
 ```scss
 .g-container {
-  height: 300px;
-  padding: 0 200px;
-  min-width: 200px;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, hsl(199, 98%, 50%), hsl(199, 98%, 38%));
+  z-index: 0;
+  overflow: hidden;
 
   & > div {
     position: relative;
-    height: 100%;
-    line-height: 300px;
-    font-size: 24px;
-    float: left;
-    text-align: center;
-    color: #fff;
-  }
+    width: 30vmin;
+    height: 30vmin;
+    background: #fff;
+    margin: 30vmin auto;
 
-  .g-middle {
-    width: 100%;
-    background: #cc6630;
-  }
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+    }
 
-  .g-left {
-    width: 200px;
-    background: #ffcc00;
-    margin-left: -100%;
-    left: -200px;
-  }
+    &::before {
+      transform-origin: 0 50%;
+      transform: translate(100%, 0) skewY(45deg) scaleX(0.6);
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.3), transparent);
+      animation: shadowMoveY 5s infinite linear alternate;
+    }
 
-  .g-right {
-    width: 200px;
-    background: pink;
-    margin-left: -100%;
-    right: -100%;
+    &::after {
+      transform-origin: 0 0;
+      transform: translate(0%, 100%) skewX(45deg) scaleY(0.6);
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.3), transparent);
+      animation: shadowMoveX 5s infinite linear alternate;
+    }
+  }
+}
+
+@keyframes shadowMoveX {
+  to {
+    transform: translate(0%, 100%) skewX(50deg) scaleY(0.6);
+  }
+}
+
+@keyframes shadowMoveY {
+  to {
+    transform: translate(100%, 0) skewY(40deg) scaleX(0.6);
   }
 }
 ```

@@ -1,86 +1,122 @@
-本例使用 column-count 实现瀑布流布局
+CSS 实现立体投影。
 
-关键点:
+#### 关键点
 
-- column-count: 元素内容将被划分的最佳列数
-- break-inside: 避免在元素内部插入分页符
+- 立体投影的关键点在于利于伪元素生成一个大小与父元素相近的元素，然后对其进行 rotate 以及定位到合适位置，再赋于阴影操作。
 
-```pug
-div.g-container
-  -for(var j = 0; j < 32; j++)
-    div.g-item
-```
+- 颜色的运用也很重要，阴影的颜色通常比本身颜色要更深，这里使用 hsl 表示颜色更容易操作，l 控制颜色的明暗度。
+ 
 
-```vue
+```html
 <div class="g-container">
-  <div class="g-item" v-for="item in count" :key="item"></div>
+  <div class="g-left"></div>
+  <div class="g-both"></div>
+  <div class="g-slide"></div>
 </div>
 ```
 
 ```scss
-$count: 32;
-
-@function randomNum($max, $min: 0, $u: 1) {
-  @return ($min + random($max)) * $u;
-}
-
-@function randomColor() {
-  @return rgb(randomNum(255), randomNum(255), randomNum(255));
-}
-
 .g-container {
-  column-count: 4;
-  column-gap: 1vw;
-  padding-top: 0.5vw;
-}
-
-.g-item {
   position: relative;
-  margin-bottom: 1vw;
-  break-inside: avoid;
-}
+  margin: 0;
+  padding: 0;
+  z-index: 0;
+  & > div {
+    position: relative;
+    width: 600px;
+    height: 100px;
+    margin: 5vmin auto 15vmin;
+    border-radius: 20px;
+  }
 
-@for $i from 1 to $count + 1 {
-  .g-item:nth-child(#{$i}) {
-    height: #{randomNum(300, 50)}px;
-    background: randomColor();
-    &::after {
-      content: "#{$i}";
+  .g-left {
+    background: hsl(48, 100%, 50%);
+    box-shadow: 0 0 5px 2px hsl(48, 100%, 45%);
+
+    &::before {
+      content: "";
       position: absolute;
-      color: #fff;
-      font-size: 24px;
       top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      left: 5%;
+      right: 5%;
+      bottom: 0;
+      border-radius: 10px;
+      background: hsl(48, 100%, 20%);
+      transform: translate(0, -15%) rotate(-4deg);
+      transform-origin: center center;
+      box-shadow: 0 0 20px 15px hsl(48, 100%, 20%);
+      z-index: -1;
+    }
+  }
+
+  .g-both {
+    background: hsl(199, 98%, 48%);
+    box-shadow: 0 0 5px 2px hsl(199, 98%, 40%);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      right: 5%;
+      bottom: 15%;
+      border-radius: 10px;
+      background: hsl(199, 98%, 20%);
+      transform: translate(0, -20%) rotate(-4deg);
+      transform-origin: center center;
+      box-shadow: 0 0 20px 15px hsl(199, 98%, 20%);
+      z-index: -1;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      right: 5%;
+      bottom: 15%;
+      border-radius: 10px;
+      background: hsl(199, 98%, 20%);
+      transform: translate(0, -20%) rotate(4deg);
+      transform-origin: center center;
+      box-shadow: 0 0 20px 15px hsl(199, 98%, 20%);
+      z-index: -1;
+    }
+  }
+
+  .g-slide {
+    background: hsl(150, 62%, 48%);
+    box-shadow: 0 0 5px 2px hsl(150, 62%, 40%);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 15%;
+      left: 90%;
+      right: 5%;
+      bottom: 20%;
+      border-radius: 10px;
+      background: hsl(150, 62%, 20%);
+      transform: translate(105%, 10%) rotate(15deg);
+      transform-origin: center center;
+      box-shadow: 0 0 20px 15px hsl(150, 62%, 20%);
+      z-index: -1;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 15%;
+      left: 5%;
+      right: 90%;
+      bottom: 20%;
+      border-radius: 10px;
+      background: hsl(150, 62%, 20%);
+      transform: translate(-105%, 10%) rotate(-15deg);
+      transform-origin: center center;
+      box-shadow: 0 0 20px 15px hsl(150, 62%, 20%);
+      z-index: -1;
     }
   }
 }
 ```
-
-浏览器支持
-
-Internet Explorer 10 和 Opera 支持 column-count 属性。
-
-Firefox 支持替代的 -moz-column-count 属性。
-
-Safari 和 Chrome 支持替代的 -webkit-column-count 属性。
-
-注释：Internet Explorer 9 以及更早版本的浏览器不支持 column-count 属性。
-
-column-count 属性规定元素应该被分隔的列数：
-
-column-gap 属性规定列之间的间隔：
-
-break-inside 取值
-
-- auto 默认值。允许（但不强制）在原理框中插入任何中断（页面，列或区域）。
-
-- avoid 避免在主体框中插入任何中断（页面，列或区域）。
-
-- avoid-page 避免原理框中的任何分页符。
-
-- avoid-column 避免原理框中的任何列中断。
-
-- avoid-region 避免原理框中的任何区域中断。
-
-- 浏览器支持 ie 10
