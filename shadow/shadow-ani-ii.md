@@ -1,165 +1,127 @@
-#### 需求
-
-多列等高，要求左右两列高度自适应且一样，分别设置不同背景色
-
-#### 实现
-
-- padding + margin + overflow 实现多列等高效果，兼容性好
-
-- border 实现多列等高，左边框宽度为200px，左列浮动，伪元素清除浮动
-
-- 父元素线性渐变背景色实现多列等高（同理各种颜色障眼法）
-
-- display：flex 实现多列等高
-
-- display：grid 实现多列等高
-
-- display:table-cell 实现多列等高
-
-
-```pug
+```html
 <div class="g-container">
-    <div class="g-xxx">
-        <div class="g-left">
-            content<br/>
-        </div>
-        <div class="g-right">
-            content<br/>
-            content<br/>
-            content<br/>
-            content<br/>
-        </div>
-    </div>
+  <div></div>
 </div>
 ```
 
 ```scss
-.g-container {
-  width: 1000px;
-  margin: 0 auto;
-  line-height: 2;
-  color: #fff;
-
-  h2 {
-    text-align: center;
-    margin: 0;
-    line-height: 60px;
-    font-size: 20px;
-    background: #00bcd4;
+$n: 10;
+$m: 5;
+$length: 25px;
+@function listShadowOne() {
+  $list: ();
+  @for $j from 1 to $m + 1 {
+    @for $i from 1 to $n + 1 {
+      $list: $list, $i * $length * 2 $j * 2 * $length * 2 #fff;
+    }
   }
+
+  @return $list;
+}
+@function listShadowTwo() {
+  $list: ();
+
+  @for $j from 1 to $m + 1 {
+    @for $i from 1 to $n + 1 {
+      $list: $list, $i * $length * 2 ($j * 2-1) * $length * 2 #00f1fc;
+    }
+  }
+
+  @return $list;
+}
+@function listShadowThree() {
+  $list: ();
+  @for $j from 1 to $m + 1 {
+    @for $i from 1 to $n + 1 {
+      $list: $list, $i * $length * 2 ($j * 2-1) * $length * 2 #fff;
+    }
+  }
+
+  @return $list;
+}
+
+@function listShadowFour() {
+  $list: ();
+
+  @for $j from 1 to $m + 1 {
+    @for $i from 1 to $n + 1 {
+      $list: $list, $i * $length * 2 $j * 2 * $length * 2 #fd0130;
+    }
+  }
+
+  @return $list;
+}
+.g-container {
+  background: #000;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
 
   & > div {
-    margin-bottom: 50px;
-  }
-
-  .g-padmar {
     position: relative;
-    overflow: hidden;
+    width: 20 * $length;
+    height: 20 * $length;
+    margin: auto;
+    background: #000;
+    animation: scale 5s infinite alternate;
+    transform-origin: center center;
 
-    & > div {
-      float: left;
-      padding-bottom: 9999px;
-      margin-bottom: -9999px;
-    }
-    .g-left {
-      width: 200px;
-      background: #4caf50;
-    }
-
-    .g-right {
-      width: 800px;
-      background: #99afe0;
-    }
-  }
-
-  .g-border {
-    position: relative;
-    width: 800px;
-    border-left: 200px solid #4caf50;
-    background: #99afe0;
-
+    &::before,
     &::after {
       content: "";
-      display: block;
-      clear: both;
+      position: absolute;
+      top: -$length * 2;
+      left: -$length * 2;
+      width: $length;
+      height: $length;
+      z-index: 1;
     }
-
-    .g-left {
-      float: left;
-      width: 200px;
-      margin-left: -200px;
+    &::before {
+      box-shadow: listShadowOne();
+      animation: radiusChange 5s infinite alternate;
     }
-
-    .g-right {
-      width: 800px;
-    }
-  }
-
-  .g-lineargradient {
-    background: linear-gradient(
-      90deg,
-      #4caf50 0,
-      #4caf50 20%,
-      #99afe0 20%,
-      #99afe0
-    );
-    overflow: hidden;
-
-    .g-left {
-      float: left;
-      width: 200px;
-    }
-
-    .g-right {
-      float: left;
-      width: 800px;
-    }
-  }
-
-  .g-flex {
-    display: flex;
-    align-items: stretch;
-
-    .g-left {
-      flex-basis: 200px;
-      background: #4caf50;
-    }
-
-    .g-right {
-      flex: 1;
-      background: #99afe0;
-    }
-  }
-
-  .g-grid {
-    display: grid;
-    grid-template-columns: 200px auto;
-
-    .g-left {
-      background: #4caf50;
-    }
-
-    .g-right {
-      background: #99afe0;
-    }
-  }
-
-  .g-table {
-    overflow: hidden;
-    display: table;
-
-    .g-left {
-      width: 200px;
-      display: table-cell;
-      background: #4caf50;
-    }
-
-    .g-right {
-      width: 800px;
-      display: table-cell;
-      background: #99afe0;
+    &::after {
+      box-shadow: listShadowThree();
+      animation: radiusChangeAfter 5s infinite alternate;
     }
   }
 }
-```
+@keyframes radiusChange {
+  25% {
+    box-shadow: listShadowOne();
+    border-radius: 50%;
+  }
+  50% {
+    box-shadow: listShadowTwo();
+    border-radius: 0%;
+  }
+  100% {
+    box-shadow: listShadowOne();
+    border-radius: 50%;
+  }
+}
 
+@keyframes radiusChangeAfter {
+  25% {
+    box-shadow: listShadowThree();
+    border-radius: 50%;
+  }
+  50% {
+    box-shadow: listShadowFour();
+    border-radius: 0%;
+  }
+  100% {
+    box-shadow: listShadowThree();
+    border-radius: 50%;
+  }
+}
+
+@keyframes scale {
+  25% {
+    transform: scale(2);
+  }
+  50% {
+    transform: scale(2);
+  }
+}
+```

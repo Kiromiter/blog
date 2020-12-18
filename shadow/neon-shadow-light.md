@@ -1,149 +1,104 @@
-- float
+#### 关键点
 
-- flex
-  - flex-direction
-  - flex-wrap
+- 多重阴影的过渡效果与白色字体的叠加
+    - 白色字体 filter:brightness(110%)
+    - 多重阴影的过渡 box-shadow、animation
 
-- grid
-  - width:unset
-  - height:unset
-
-```pug
-div.g-container
-  h2 float 实现
-  div.g-float
-    - for(var i=0;i<3;i++)
-      div.g-item #{i}
-  
-  h2 flex 实现
-  div.g-flex
-    - for(var i=0;i<3;i++)
-      div.g-item #{i}
-  
-  h2 grid 实现
-  div.g-grid
-    - for(var i=0;i<3;i++)
-      div.g-item #{i}
-```
-
-```vue
+```html
 <div class="g-container">
-  <h2>float 实现</h2>
-  <div class="g-float">
-    <div class="g-item" v-for="item in count" :key="'float' + item">
-      {{ item }}
-    </div>
-  </div>
-  <h2>flex 实现</h2>
-  <div class="g-flex">
-    <div class="g-item" v-for="item in count" :key="'flex' + item">
-      {{ item }}
-    </div>
-  </div>
-  <h2>grid 实现</h2>
-  <div class="g-grid">
-    <div class="g-item" v-for="item in count" :key="'grid' + item">
-      {{ item }}
-    </div>
-  </div>
+  <div><p class="pink">PINK</p></div>
+  <div><p class="orange">Box-Shadow</p></div>
+  <div><p class="yellow">YELLOW</p></div>
 </div>
 ```
 
 ```scss
+$pink: #e91e63;
+$orange: #ff5722;
+$yellow: #ffeb3b;
+
+@function dark($color) {
+  @return 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px $color,
+    0 0 35px $color, 0 0 40px $color, 0 0 50px $color, 0 0 75px $color;
+}
+
+@function light($color) {
+  @return 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px $color,
+    0 0 70px $color, 0 0 80px $color, 0 0 100px $color, 0 0 150px $color;
+}
+
 .g-container {
-  margin: 20px auto;
-  width: 400px;
+  background: #000;
   text-align: center;
-}
 
-h2 {
-  margin: 30px auto;
-  font-size: 28px;
-}
+  p {
+    display: inline;
+    font-family: Ink Free;
+    font-weight: bold;
+    text-align: center;
+    font-size: 10vmin;
+    line-height: 20vmin;
+    color: #fff;
+    cursor: pointer;
 
-.g-item {
-  width: 190px;
-  height: 190px;
-  box-sizing: border-box;
-  border: 1px solid #666;
-  border-radius: 10px;
-  line-height: 190px;
-  font-size: 32px;
-  cursor: pointer;
-  margin: 5px;
-  transition: 0.1s all;
-  &:first-child {
-    height: 390px;
-    line-height: 390px;
+    &:hover {
+      color: #fff;
+    }
   }
-}
 
-.g-float {
-  width: 400px;
-  height: 400px;
-  overflow: hidden;
-  .g-item {
-    float: left;
+  .pink {
+    filter: brightness(110%);
+    text-shadow: dark($pink);
+    animation: pink 1.5s ease-in-out infinite alternate;
   }
-  &:hover {
-    .g-item:first-child {
-      width: 390px;
-      height: 190px;
-      line-height: 190px;
+
+  .orange {
+    color: $orange;
+
+    &:hover {
+      animation: orange 1.5s ease-in-out infinite alternate;
+    }
+  }
+
+  .yellow {
+    color: $yellow;
+
+    &:hover {
+      animation: yellow 1.5s ease-in-out infinite alternate;
     }
   }
 }
 
-.g-flex {
-  width: 400px;
-  height: 400px;
-  overflow: hidden;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  &:hover {
-    flex-direction: row;
-    .g-item:first-child {
-      width: 390px;
-      height: 190px;
-      line-height: 190px;
-    }
+@keyframes pink {
+  to {
+    text-shadow: light($pink);
   }
 }
 
-.g-grid {
-  width: 400px;
-  height: 400px;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: repeat(2, 50%);
-  grid-template-rows: repeat(2, 50%);
-  grid-auto-flow: column;
-  .g-item {
-    width: unset;
-    height: unset;
-    &:first-child {
-      grid-row: 1/3;
-      grid-column: 1/2;
-    }
+@keyframes orange {
+  to {
+    text-shadow: dark($orange);
   }
-  &:hover {
-    grid-auto-flow: row;
-    .g-item:first-child {
-      line-height: 190px;
-      grid-row: 1/2;
-      grid-column: 1/3;
-    }
+  from {
+    filter: brightness(110%);
+    text-shadow: light($orange);
+  }
+}
+
+@keyframes yellow {
+  to {
+    text-shadow: dark($yellow);
+  }
+  from {
+    filter: brightness(110%);
+    text-shadow: light($yellow);
   }
 }
 ```
 
-unset 关键字我们可以理解为不设置，其实，它是关键字initial和inherit的组合。
+浏览器：
 
-当我们给一个css属性设置了unset的话：
+Chrome | Internet Explorer | Edge | Firefox | Safari | Opera
+---|---|---|---|---|---
+18.0 -webkit- | 不支持 | 79 | 35.0 | 6.0 -webkit- | 15.0 -webkit-
 
-1.如果该属性默认继承属性，该值等同于inherit
-
-2.如果该属性是非继承属性，该值等同于initial
-
-浏览器兼容：ie不支持，可以将 width height 设置为 `auto`
