@@ -52,7 +52,6 @@ div.g-container
   .g-right {
     width: 200px;
     background: pink;
-    margin-left: -200px;
   }
 }
 ```

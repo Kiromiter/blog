@@ -1,77 +1,141 @@
-本例使用 `CSS flex` 实现瀑布流布局
+##### 关键点
 
-关键点，横向 flex 布局嵌套多列纵向 flex 布局，使用了 `百分比` 进行自适应缩放
+- 阴影实现的关键点在于使用伪元素绝对定位在容器的一角，元素本身透明，阴影扩散开形成内切圆角效果
 
-```pug
-div.g-container
-  -for(var i = 0; i < 4; i++)
-    div.g-queue
-      -for(var j = 0; j < 8; j++)
-        div.g-item
-```
+- 阴影实现缺点，单个标签最多只能是2个内切圆角
 
-```vue
+- 径向渐变实现内切圆角可以是4边
+
+
+```html
 <div class="g-container">
-  <div class="g-queue" v-for="line in lineCount" :key="line">
-    <div class="g-item" v-for="item in count" :key="item"></div>
-  </div>
+  <div class="shadow">使用阴影的扩散半径实现内切圆角</div>
+  <div class="shadow2">阴影实现缺点，单个标签最多是2边</div>
+  <div class="linear">使用径向渐变实现内切圆角</div>
+  <div class="linear2">径向渐变实现内切圆角可以是4边</div>
 </div>
 ```
 
 ```scss
-$lineCount: 4;
-$count: 8;
-
-@function randomNum($max, $min: 0, $u: 1) {
-  @return ($min + random($max)) * $u;
-}
-
-@function randomColor() {
-  @return rgb(randomNum(255), randomNum(255), randomNum(255));
-}
+$color: #e91e63;
 
 .g-container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.g-queue {
-  display: flex;
-  flex-direction: column;
-  flex-basis: 24%;
-}
-
-.g-item {
-  position: relative;
+  font-size: 12px;
   width: 100%;
-  margin: 1% 0;
+  height: 100%;
+  background: linear-gradient(90deg, #fff, #bbb);
+
+  div {
+    position: relative;
+    width: 20vw;
+    height: 8vw;
+    margin: 1vw auto;
+    border-radius: 1vmin;
+    overflow: hidden;
+    line-height: 8vw;
+    color: #fff;
+    text-align: center;
+    z-index: 0;
+  }
+
+  .shadow {
+    &::before {
+      position: absolute;
+      content: "";
+      top: -2vw;
+      left: -2vw;
+      width: 4vw;
+      height: 4vw;
+      border-radius: 50%;
+      box-shadow: 0 0 0 25vw $color;
+      z-index: -1;
+      animation: shadowmove 10s infinite;
+    }
+  }
+
+  .shadow2 {
+    &::before {
+      position: absolute;
+      content: "";
+      top: -2vw;
+      left: -2vw;
+      width: 4vw;
+      height: 4vw;
+      border-radius: 50%;
+      box-shadow: 0 0 0 15vw $color;
+      z-index: -1;
+    }
+
+    &::after {
+      position: absolute;
+      content: "";
+      bottom: -2vw;
+      right: -2vw;
+      width: 4vw;
+      height: 4vw;
+      border-radius: 50%;
+      box-shadow: 0 0 0 15vw $color;
+      z-index: -1;
+    }
+  }
+
+  .linear {
+    background-size: 100% 100%;
+    background-image: radial-gradient(
+      circle at 0 0,
+      transparent 0,
+      transparent 2vw,
+      #03a9f5 2vw
+    );
+    background-repeat: no-repeat;
+  }
+
+  .linear2 {
+    filter: drop-shadow(0 0 3px #666);
+    background-size: 50% 50%;
+    background-image: radial-gradient(
+        circle at 100% 100%,
+        transparent 0,
+        transparent 2vw,
+        #03a9f5 2vw
+      ),
+      radial-gradient(
+        circle at 0 0,
+        transparent 0,
+        transparent 2vw,
+        #03a9f5 2vw
+      ),
+      radial-gradient(
+        circle at 100% 0,
+        transparent 0,
+        transparent 2vw,
+        #03a9f5 2vw
+      ),
+      radial-gradient(
+        circle at 0 100%,
+        transparent 0,
+        transparent 2vw,
+        #03a9f5 2vw
+      );
+    background-repeat: no-repeat;
+    background-position: right bottom, left top, right top, left bottom;
+  }
 }
 
-@for $i from 1 to $lineCount + 1 {
-  .g-queue:nth-child(#{$i}) {
-    @for $j from 1 to $count + 1 {
-      .g-item:nth-child(#{$j}) {
-        height: #{randomNum(300, 50)}px;
-        background: randomColor();
-        &::after {
-          content: "#{$j}";
-          color: #fff;
-          font-size: 24px;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-        }
-      }
-    }
+@keyframes shadowmove {
+  0% {
+    background: $color;
+    box-shadow: 0 0 0 0 $color;
+  }
+
+  10% {
+    background: transparent;
+    box-shadow: 0 0 0 0 $color;
+  }
+
+  50% {
+    background: transparent;
+    box-shadow: 0 0 0 25vw $color;
   }
 }
 ```
-
-margin 属性值为百分比时的边距是基于 `包含块` || `父元素的宽度`来计算的
-
-flex 属性需要 `ie 10` 才能兼容
-
-flex-basis 是 flex 中的 `子元素` 属性，默认为`auto`   
-
-!> 此属性 `优先级大于width`

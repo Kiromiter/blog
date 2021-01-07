@@ -8,6 +8,8 @@
   - 使用 `fr` 均分，`column-gap` 列间距
 - `display: flex` 实现
   - `flex-basis` 设置宽度
+- `display: flex + 非calc` 实现
+  - `flex-grow` 设置 grow 比例
 - `position: aboslute + float` 实现
   - `calc` 属性自动计算宽度
 - `position: aboslute + float + 非calc` 实现
@@ -26,6 +28,11 @@ div.g-container
     - for(var i=0;i<4;i++)
       div.g-item #{i}
     
+  h2 display: flex + 非calc 实现
+  div.g-flex
+    - for(var i=0;i<4;i++)
+      div.g-item #{i}
+
   h2 position: absolute + float 实现
   div.g-position
     - for(var i=0;i<4;i++)
@@ -50,6 +57,12 @@ div.g-container
   </div>
   <h2>display: flex 实现</h2>
   <div class="g-flex">
+    <div class="g-item" v-for="item in 4" :key="'flex' + item">
+      {{ item - 1 }}
+    </div>
+  </div>
+  <h2>display: flex 实现 + 非calc实现</h2>
+  <div class="g-flex-grow">
     <div class="g-item" v-for="item in 4" :key="'flex' + item">
       {{ item - 1 }}
     </div>
@@ -107,6 +120,22 @@ div.g-container
     .g-item {
       flex-basis: calc((100% - 200px - 30px) / 3);
       &:first-child {
+        flex-basis: 200px;
+      }
+    }
+  }
+
+  .g-flex-grow {
+    height: 200px;
+    background: #ff9800;
+    display: flex;
+    justify-content: space-between;
+    .g-item {
+      flex-grow: 1;
+      margin-left: 10px;
+      &:first-child {
+        margin-left: 0;
+        flex-grow: 0;
         flex-basis: 200px;
       }
     }

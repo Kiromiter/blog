@@ -48,3 +48,21 @@
 - [使用box-shadow/渐变实现内切角](./shadow/inscribed-angle.md)
 - [单标签实现叉子图形](./shadow/single-div-fork.md)
 
+
+### 伪元素 Pseudo
+
+- [使用:not()伪类实现弹窗背景元素模糊](./pseudo/not.md)
+- [使用:not()伪类控制特殊边框样式](./pseudo/not-2.md)
+- [伪元素 focus-within 纯 CSS 方式实现掘金登陆特效](./pseudo/juejin.md)
+- [placeholder-shown 配合 focus-within 实现 input 输入交互](./pseudo/focus-within-placeholder-shown.md)
+- [伪元素+border实现气泡对话框](./pseudo/bubble.md)
+- [使用 checked 伪类实现纯 CSS Tab 切换](./pseudo/focus-checked.md)
+- [使用 target 伪类实现纯 CSS Tab 切换](./pseudo/focus-target.md)
+- [focus-within switch tab](./pseudo/focus-within.md)
+- [伪元素 hover 实现纯 CSS 方式控制动画的暂停与播放](./pseudo/animation-control-hover.md)
+- [伪元素 checked 实现纯 CSS 方式控制动画的暂停与播放](./pseudo/animation-control.md)
+- [伪元素 target 实现纯 CSS 方式控制动画的暂停与播放](./pseudo/animation-control-target.md)
+- [伪元素实现边界智能判断移动](./pseudo/boundary-judge.md)
+- [伪元素实现打点 loading 效果](./pseudo/loading-content.md)
+- [伪元素遮罩实现线条 loading 效果](./pseudo/loading-line.md)
+
