@@ -66,3 +66,28 @@
 - [伪元素实现打点 loading 效果](./pseudo/loading-content.md)
 - [伪元素遮罩实现线条 loading 效果](./pseudo/loading-line.md)
 
+### 滤镜 Filter
+
+- [生成彩色阴影](./filter/shadow.md)
+- [生成特殊融合效果。](./filter/blur-constrast.md)
+- [生成火焰效果](./filter/fire.md)
+- [生成火焰效果2](./filter/fire-2.md)
+- [滤镜及混合模式混搭特效](./filter/mix.md)
+- [单标签实现滴水效果](./filter/single-div-water-drop.md)
+- [小球穿梭效果](./filter/ball.md)-through
+- [小球穿梭放大loading动画](./filter/ball-loading.md)
+- [实现渐变背景动画](./filter/hue-rotate-color.md)
+- [生成规则阴影](./filter/polygon-shadow.md)
+- [单标签纯CSS实现幽灵动画](./filter/ghost.md)
+
+### 边框 Border
+
+- [实现波浪动画](./border/wave.md)
+- [实现波浪百分比图](./border/wave-percent.md)
+- [实现充电动画](./border/chargin.md)
+- [变换实现loading效果](./border/loading.md)
+- [变换实现文字输入效果](./border/typing.md)
+- [单标签线条动画](./border/line-animation.md)
+- [使用outline巧妙实现加号符号](./border/line-drop-animation.md)
+- [实现波浪动画](./border/outline-symbol-add.md)
+- [巧用overflow及实现边框线条动画](./border/overflow-btn.md)
